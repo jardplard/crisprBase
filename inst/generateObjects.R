@@ -1,12 +1,62 @@
 library(crisprBase)
 library(devtools)
 
+nnn_pams <- c("AA", "AC", "AG", "AT",
+              "CA", "CC", "CG", "CT",
+              "GA", "GC", "GG", "GT",
+              "TA", "TC", "TG", "TT")
+nnn_pams <- paste0("(3/3)N", nnn_pams)
+
+cas9_pam_weights <- c("0.000", "0.000", "0.259", "0.000",
+                      "0.000", "0.000", "0.107", "0.000",
+                      "0.069", "0.022", "1.000", "0.016",
+                      "0.000", "0.000", "0.039", "0.000")
+
+cas9ng_pam_weights <- c("0.138", "0.092", "0.415", "0.305",
+                        "0.000", "0.000", "0.007", "0.000",
+                        "0.870", "0.694", "0.952", "1.000",
+                        "0.017", "0.007", "0.092", "0.007")
+
+spry_pam_weights <- c("0.514", "0.472", "1.000", "0.611",
+                      "0.208", "0.347", "0.653", "0.778",
+                      "0.653", "0.764", "0.806", "0.319",
+                      "0.014", "0.347", "0.319", "0.042")
+
+spryc_pam_weights <- c("0.470", "0.614", "0.699", "0.434",
+                       "0.964", "0.614", "0.602", "0.542",
+                       "0.614", "0.675", "0.542", "1.000",
+                       "0.578", "0.229", "0.470", "0.277")
+
+
+
+
 SpCas9 <- CrisprNuclease("SpCas9",
-                         pams=c("(3/3)NGG", "(3/3)NAG", "(3/3)NGA"),
-                         weights=c(1, 0.2593, 0.0694),
+                         pams=nnn_pams,
+                         weights=cas9_pam_weights,
                          metadata=list(description="Wildtype Streptococcus pyogenes Cas9 (SpCas9) nuclease"),
                          pam_side="3prime",
                          spacer_length=20)
+
+SpCas9NG <- CrisprNuclease("SpCas9NG",
+                         pams=nnn_pams,
+                         weights=cas9ng_pam_weights,
+                         metadata=list(description="relaxed-PAM engineered SpCas9 variant (Nishimasu 2018)."),
+                         pam_side="3prime",
+                         spacer_length=20)
+
+SpRY <- CrisprNuclease("SpRY",
+                            pams=nnn_pams,
+                            weights=spry_pam_weights,
+                            metadata=list(description="Near-PAMless engineered SpCas9 variant (Walton 2020)."),
+                            pam_side="3prime",
+                            spacer_length=20)
+
+SpRYc <- CrisprNuclease("SpRYc",
+                            pams=nnn_pams,
+                            weights=spryc_pam_weights,
+                            metadata=list(description="SpRY PID with Sc++ N-terminus (Zhao 2023)."),
+                            pam_side="3prime",
+                            spacer_length=20)
 
 
 SaCas9 <- CrisprNuclease("SaCas9",
@@ -56,7 +106,7 @@ motifs <- paste0("(3/3)", pams$PAM)
 SpG <- CrisprNuclease("SpG",
                              pams=motifs,
                              weights=pams$Score,
-                             metadata=list(description="Engineered Streptococcus pyogenes Cas9 nuclease SpCas9-NG (SpG)."),
+                             metadata=list(description="Engineered Streptococcus pyogenes Cas9 nuclease SpCas9NG (SpG)."),
                              pam_side="3prime",
                              spacer_length=20)
 
@@ -89,6 +139,9 @@ metadata(BE4max)$description_base_editor <- "BE4max cytosine base editor."
 
 #dir.create("../data")
 use_data(SpCas9,
+         SpCas9NG,
+         SpRY,
+         SpRYc,
          SaCas9,
          SpG,
          AsCas12a,
